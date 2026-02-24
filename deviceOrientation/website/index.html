@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <title>Globe to 360 City Viewer</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="ui-bar">
+        <div id="mode-label">Mode: <span id="modeValue">Globe</span></div>
+        <div id="city-label">City: <span id="cityValue">None</span></div>
+        <div id="credits-label"><span id="creditsValue">10</span> / 10 cities today</div>
+        <div id="buttons">
+            <button id="backToGlobeBtn" class="ui-btn" style="display:none;">Back to Globe</button>
+            <button id="requestOrientationButton" class="ui-btn">Enable Motion</button>
+        </div>
+    </div>
+
+    <div id="sceneContainer"></div>
+
+    <div id="hint">
+        <p id="hintText">Drag to rotate the globe. Scroll to zoom. Tap a pin to enter a city.</p>
+    </div>
+
+    <!-- Google Maps API key (config.js, add to .gitignore) -->
+    <script src="config.js"></script>
+
+    <!-- three.js via importmap (r150+ recommended) -->
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+    </script>
+
+    <!-- app logic as ES module -->
+    <script type="module" src="app.js"></script>
+    <script src="requestOrientation.js"></script>
+</body>
+</html>
