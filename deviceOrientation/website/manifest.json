@@ -1,12 +1,16 @@
 {
-  "name": "Device Orientation",
+  "name": "Globe 360 - City Viewer",
+  "short_name": "Globe 360",
+  "description": "Explore cities in 360° using device orientation. Interactive globe with Street View and real-time chat.",
   "icons": [
     {
       "src": "assets/512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
-  "orientation": "Natural",
-  "display": "standalone"
+  "orientation": "any",
+  "display": "standalone",
+  "start_url": "/"
 }

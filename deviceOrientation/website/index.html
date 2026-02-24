@@ -24,6 +24,24 @@
         <p id="hintText">Drag to rotate the globe. Scroll to zoom. Tap a pin to enter a city.</p>
     </div>
 
+    <!-- Chat panel (shown in 360 mode) -->
+    <div id="chatPanel" class="chat-panel hidden">
+        <div class="chat-header">
+            <span class="chat-title">💬 Chat</span>
+            <span id="chatCount" class="chat-count">0 here</span>
+            <button id="chatToggleBtn" class="chat-toggle-btn" aria-label="Toggle chat">−</button>
+        </div>
+        <div class="chat-tabs">
+            <button id="tabGroup" class="chat-tab active">Group</button>
+            <button id="tabAI" class="chat-tab">Ask AI</button>
+        </div>
+        <div id="chatMessages" class="chat-messages"></div>
+        <div class="chat-input-wrap">
+            <input id="chatInput" type="text" placeholder="Type a message or ask the AI..." maxlength="500" />
+            <button id="chatSendBtn" class="chat-send-btn">Send</button>
+        </div>
+    </div>
+
     <!-- Google Maps API key (config.js, add to .gitignore) -->
     <script src="config.js"></script>
 
@@ -37,6 +55,7 @@
     }
     </script>
 
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <!-- app logic as ES module -->
     <script type="module" src="app.js"></script>
     <script src="requestOrientation.js"></script>

@@ -48,6 +48,10 @@ const MOVE_THRESHOLD = 10;
 // City 360 mode (Street View only)
 let streetViewPanorama = null;
 
+// Chat
+let chatSocket = null;
+let chatActiveTab = "group"; // "group" | "ai"
+
 // Zoom (FOV) - step forward = zoom in, step back = zoom out
 let deviceFov = 75;
 const FOV_MIN = 35;
@@ -173,6 +177,7 @@ function initGlobe() {
   currentCity = null;
   streetViewPanorama = null;
   useStreetView = false;
+  leaveChat();
   hideCityPreview();
   pendingCity = null;
   modeValue.textContent = "Globe";
@@ -503,6 +508,7 @@ function enterCity360StreetView(city, apiKey) {
       }
     });
     initStreetViewOrientation();
+    initChat(city);
   });
 }
 
@@ -524,6 +530,133 @@ function showNoStreetViewMessage() {
   msg.style.cssText = "position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.8);color:#fff;font-size:18px;z-index:20;text-align:center;padding:20px;";
   document.body.appendChild(msg);
   setTimeout(() => msg.remove(), 3000);
+}
+
+// --- Chat + AI tour guide ---
+function initChat(city) {
+  const panel = document.getElementById("chatPanel");
+  const messagesEl = document.getElementById("chatMessages");
+  const inputEl = document.getElementById("chatInput");
+  const sendBtn = document.getElementById("chatSendBtn");
+  const countEl = document.getElementById("chatCount");
+  const tabGroup = document.getElementById("tabGroup");
+  const tabAI = document.getElementById("tabAI");
+  const toggleBtn = document.getElementById("chatToggleBtn");
+
+  if (!panel || !messagesEl) return;
+
+  panel.classList.remove("hidden");
+  panel.classList.remove("collapsed");
+  messagesEl.innerHTML = "";
+  chatActiveTab = "group";
+
+  const userName = localStorage.getItem("globeChatName") || "Explorer";
+  const roomId = `city_${(city?.name || "").replace(/\s+/g, "_")}`;
+
+  function appendMsg(text, user, isAI = false) {
+    const div = document.createElement("div");
+    div.className = `chat-msg ${isAI ? "ai" : "user"}`;
+    const span = user ? `<span class="chat-msg-user">${escapeHtml(user)}:</span>` : "";
+    div.innerHTML = span + escapeHtml(text);
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function escapeHtml(s) {
+    const d = document.createElement("div");
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  // Socket.io
+  if (typeof io !== "undefined") {
+    chatSocket = io({ path: "/socket.io" });
+    chatSocket.emit("join_location", { cityName: city?.name, userName });
+    chatSocket.on("joined", ({ count }) => {
+      if (countEl) countEl.textContent = `${count} here`;
+    });
+    chatSocket.on("user_joined", ({ count, userName: u }) => {
+      if (countEl) countEl.textContent = `${count} here`;
+      appendMsg(`${u} joined the chat`, "System");
+    });
+    chatSocket.on("user_left", ({ count }) => {
+      if (countEl) countEl.textContent = `${count} here`;
+    });
+    chatSocket.on("chat", (msg) => {
+      appendMsg(msg.text, msg.user);
+    });
+  }
+
+  // AI greeting
+  fetch("/api/ai/greet", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ cityName: city?.name }),
+  })
+    .then((r) => r.json())
+    .then(({ text }) => appendMsg(text, "🤖 AI Guide", true))
+    .catch(() => appendMsg("Welcome! Ask me anything about what you see.", "🤖 AI Guide", true));
+
+  function sendMessage() {
+    const text = inputEl?.value?.trim();
+    if (!text) return;
+    inputEl.value = "";
+
+    if (chatActiveTab === "ai") {
+      appendMsg(text, "You");
+      const loc = streetViewPanorama?.getLocation?.();
+      const pov = streetViewPanorama?.getPov?.();
+      fetch("/api/ai/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: text,
+          cityName: city?.name,
+          locationDesc: loc?.description || loc?.shortDescription,
+          heading: pov?.heading,
+          pitch: pov?.pitch,
+        }),
+      })
+        .then((r) => r.json())
+        .then(({ text: reply }) => appendMsg(reply, "🤖 AI Guide", true))
+        .catch(() => appendMsg("Sorry, I couldn't reach the AI. Try again!", "🤖 AI Guide", true));
+    } else if (chatSocket) {
+      chatSocket.emit("chat", { text });
+      appendMsg(text, "You");
+    }
+  }
+
+  sendBtn?.addEventListener("click", sendMessage);
+  inputEl?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+
+  tabGroup?.addEventListener("click", () => {
+    chatActiveTab = "group";
+    tabGroup.classList.add("active");
+    tabAI?.classList.remove("active");
+    inputEl.placeholder = "Chat with others here...";
+  });
+  tabAI?.addEventListener("click", () => {
+    chatActiveTab = "ai";
+    tabAI.classList.add("active");
+    tabGroup?.classList.remove("active");
+    inputEl.placeholder = "Ask the AI about what you're looking at...";
+  });
+
+  toggleBtn?.addEventListener("click", () => {
+    panel.classList.toggle("collapsed");
+    toggleBtn.textContent = panel.classList.contains("collapsed") ? "+" : "−";
+  });
+}
+
+function leaveChat() {
+  if (chatSocket) {
+    chatSocket.disconnect();
+    chatSocket = null;
+  }
+  const panel = document.getElementById("chatPanel");
+  if (panel) panel.classList.add("hidden");
 }
 
 function getTouchDistance(touches) {

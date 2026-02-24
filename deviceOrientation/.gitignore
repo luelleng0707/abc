@@ -2,3 +2,4 @@ node_modules/
 website/config.js
 .env
 *.log
+.env.local
