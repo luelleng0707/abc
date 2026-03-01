@@ -32,6 +32,7 @@ const io = new Server(HTTPSserver); // start socket io
 
 io.on('connection', function(socket){
     console.log("someone has connected to via socket protocol");
+    io.emit("messageFromServer", { sender: "system", message: "Someone joined the chat" });
 
     socket.on("messageFromClient",function(data){
         console.log(data);
@@ -41,6 +42,7 @@ io.on('connection', function(socket){
             message: IncomingMessage
         }
         socket.emit("messageFromServer", messageForAllClients);
+        io.emit("messageFromServer", { sender: (data && data.name) || "unknown", message: (data && data.message) || "" });
     })
 
     socket.on('disconnect', function(){
