@@ -23,7 +23,7 @@ readyButton.addEventListener("click", function(){
     // inform server of my role (frog and which frog)
     let data = {
     role: "frog",
-    frogIX: frogIdx
+    frogIdx: frogIdx
 }
     socket.emit("my-role",data)
 

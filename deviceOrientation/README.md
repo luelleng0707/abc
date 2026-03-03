@@ -84,3 +84,19 @@ Visit **https://localhost:3000** in your browser. On a phone, use your computer�
 - Google Maps Street View API
 - Device Orientation & Motion APIs
 - OpenAI API (optional)
+
+---
+
+## Development Notes & Credits
+
+### Tools & Process
+
+- **ChatGPT** was used to brainstorm multi-touch and interaction ideas that fit both the course requirements and the app concept, and to figure out how to implement and integrate them.
+- Originally considered using **360° videos** for city exploration, but switched to the **Google Maps Street View API** instead for better coverage and easier integration.
+- A **video walkthrough** of the app may be included in the project submission.
+
+### Third-Party Credits
+
+- **Three.js** – 3D globe, OrbitControls, and rendering ([threejs.org](https://threejs.org) / [github.com/mrdoob/three.js](https://github.com/mrdoob/three.js))
+- **Earth texture** – [three.js examples](https://github.com/mrdoob/three.js/blob/dev/examples/textures/planets/earth_atmos_2048.jpg)
+- **Starfield background** – [Solarsystemscope texture (Milky Way)](https://upload.wikimedia.org/wikipedia/commons/8/85/Solarsystemscope_texture_8k_stars_milky_way.jpg) via Wikimedia Commons

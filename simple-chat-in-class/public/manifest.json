@@ -1,12 +1,6 @@
 {
-  "name": "Device Orientation P5",
-  "icons": [
-    {
-      "src": "assets/512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
-  ],
+  "name": "Simple Chat",
+  "icons": [],
   "orientation": "Natural",
   "display": "standalone"
 }

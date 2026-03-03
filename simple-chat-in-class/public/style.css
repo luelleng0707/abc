@@ -9,16 +9,15 @@ body{
     background-color: bisque;
     display: flex;
     flex-direction: column;
-    /* align-content: stretch; */
     justify-content: space-between;
     padding: 10px 5px;
-    /* padding-bottom: 15px; */
     box-sizing: border-box;
 }
 
 #threadWrapper{
     background-color: aquamarine;
-    flex-grow: 1;
+    flex: 1 1 0;
+    min-height: 0;
     margin: 15px 0px; 
     display: flex;
     flex-direction: column;
@@ -79,4 +78,76 @@ body{
     display: inline;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 
+}
+
+.card-panel, .asker-panel{
+    margin-top: 8px;
+    padding: 12px;
+    background: #2d2d2d;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+@media (min-width: 600px) {
+    .card-panel, .asker-panel { min-height: 140px; }
+}
+.card-panel-title{
+    margin: 0 0 10px 0;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #fff;
+}
+#cardHand{
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+#askerResponses{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.card-btn{
+    width: 90px;
+    height: 130px;
+    padding: 6px;
+    border-radius: 6px;
+    border: 2px solid #111;
+    background: #ffffff;
+    cursor: pointer;
+    font-size: 0.75em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    transform-origin: bottom center;
+    transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+}
+.checker-card{
+    background: #fefefe;
+}
+#cardHand .card-btn:nth-child(1){
+    transform: rotate(-8deg);
+}
+#cardHand .card-btn:nth-child(2){
+    transform: rotate(-3deg);
+}
+#cardHand .card-btn:nth-child(3){
+    transform: rotate(3deg);
+}
+#cardHand .card-btn:nth-child(4){
+    transform: rotate(8deg);
+}
+.card-btn:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+.asker-pick{
+    width: 140px;
+    height: auto;
+    min-height: 60px;
 }
