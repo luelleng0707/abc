@@ -10,11 +10,31 @@ const app = express(); // the server "app", the server behaviour
 const portHTTPS = 3000; // port for https
 // const portHTTP = 3001; // port for http
 
-// returning to the client anything that is
 // inside the public folder
 app.use(express.static('public'));
 
 app.get("/favicon.ico", function (req, res) { res.status(204).end(); });
+
+// API: fetch response cards from Google Sheet (published as CSV)
+app.get("/api/cards", function (req, res) {
+    const url = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
+    fetch(url)
+        .then(function (r) { return r.text(); })
+        .then(function (csv) {
+            const lines = csv.split(/\r?\n/).filter(function (line) { return line.trim(); });
+            const cards = [];
+            for (let i = 0; i < lines.length; i++) {
+                const row = lines[i];
+                const text = (row.split(",")[0] || row).trim().replace(/^"|"$/g, "");
+                if (text) cards.push(text);
+            }
+            res.json({ cards: cards });
+        })
+        .catch(function (err) {
+            console.error("Cards fetch error:", err);
+            res.json({ cards: ["No cards loaded—check GOOGLE_SHEET_ID"] });
+        });
+});
 
 
 // Creating object of key and certificate
@@ -31,59 +51,32 @@ const { Server } = require('socket.io'); // include library
 const { IncomingMessage } = require('http');
 const io = new Server(HTTPSserver); // start socket io 
 
-let currentRound = { askerName: "", question: "", responses: [] };
 let currentAskerSocketId = null;
 
 io.on('connection', function(socket){
     console.log("someone has connected to via socket protocol");
     io.emit("messageFromServer", { sender: "system", message: "Someone joined the chat" });
 
-    socket.on("nameChanged", function (data) {
-        let oldName = (data && data.oldName) || "someone";
-        let newName = (data && data.newName) || "someone";
-        io.emit("messageFromServer", { sender: "system", message: oldName + " is now called " + newName });
-    });
-
     socket.on("messageFromClient",function(data){
         console.log(data);
-
-        let text = (data && data.message) || "";
-        let senderName = (data && data.name) || "unknown";
+        currentAskerSocketId = socket.id;
 
         let messageForAllClients = {
             sender: "unknown",
             message: IncomingMessage
         }
         socket.emit("messageFromServer", messageForAllClients);
-        io.emit("messageFromServer", { sender: senderName, message: text });
-
-        // only start question round if message ends with "?"
-        if (!text.trim().endsWith("?")) {
-            currentRound = { askerName: "", question: "", responses: [] };
-            currentAskerSocketId = null;
-            io.emit("roundFinished");
-            return;
-        }
-
-        currentRound = { askerName: senderName, question: text, responses: [] };
-        currentAskerSocketId = socket.id;
-        io.emit("questionFromServer", { askerName: currentRound.askerName, question: currentRound.question });
+        io.emit("messageFromServer", { sender: (data && data.name) || "unknown", message: (data && data.message) || "" });
+        io.emit("questionFromServer", { askerName: (data && data.name) || "unknown", question: (data && data.message) || "" });
     });
 
     socket.on("cardResponseFromClient", function (data) {
-        currentRound.responses.push({ sender: (data && data.name) || "unknown", cardText: (data && data.cardText) || "" });
-        if (currentAskerSocketId) {
-            io.to(currentAskerSocketId).emit("responsesForAsker", { responses: currentRound.responses, askerName: currentRound.askerName });
-        }
+        var payload = { sender: (data && data.name) || "unknown", cardText: (data && data.cardText) || "" };
+        if (currentAskerSocketId) io.to(currentAskerSocketId).emit("responseForAsker", payload);
     });
 
-    socket.on("askerPickedFavorite", function (data) {
-        var idx = (data && data.chosenIndex) >= 0 ? data.chosenIndex : 0;
-        var r = currentRound.responses[idx];
-        if (r) {
-            io.emit("messageFromServer", { sender: currentRound.askerName, message: "🏆 Winner: " + r.sender + " — \"" + r.cardText + "\"" });
-            io.emit("winnerRevealed", { winner: r.sender, cardText: r.cardText });
-        }
+    socket.on("askerPicksFavoriteFromClient", function (data) {
+        io.emit("winnerFromServer", { sender: (data && data.chosenSender) || "?", cardText: (data && data.chosenCardText) || "" });
     });
 
     socket.on('disconnect', function(){

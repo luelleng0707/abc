@@ -62,16 +62,16 @@ io.on('connection', (socket) => {
 
     // always comes from conductor
     // listen to frogs being triggered
-
+    
         // check if frog exists
         // option A: tell taht frog to make sounds
         // option B: chck if the frog currently makes sounds
         //      either tell them to start or stop
-
-
-
-
-
+    
+    
+    
+    
+    
     
     // DISCONNECT
     // manage the roles
