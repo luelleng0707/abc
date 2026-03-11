@@ -1,9 +1,10 @@
 {
-  "name": "simple-chat-in-class",
+  "name": "farkle",
   "version": "1.0.0",
-  "description": "",
-  "main": "script.js",
+  "description": "Multiplayer Farkle dice game",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

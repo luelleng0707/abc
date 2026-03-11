@@ -1,5 +1,6 @@
 function setup() {
-  let canvas = createCanvas(windowWidth, windowHeight);
+  let container = document.getElementById("p5-canvas-container");
+  let canvas = createCanvas(container.offsetWidth, container.offsetHeight);
   canvas.parent("p5-canvas-container");
 }
 
@@ -26,6 +27,7 @@ function touchEnded() {
 }
 
 function windowResized(){
-  resizeCanvas(windowWidth, windowHeight);
+  let container = document.getElementById("p5-canvas-container");
+  resizeCanvas(container.offsetWidth, container.offsetHeight);
 }
 
