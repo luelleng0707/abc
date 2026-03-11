@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+  <link rel="manifest" href="../manifest.json" />
+  <title>Project 1 – Farkle</title>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <script src="../socket.io/socket.io.js"></script>
+</head>
+
+<body>
+  <div class="main-wrapper"></div>
+
+  <div class="hud">
+    <section class="intro">
+      <h1>Project 1: Juggling with Sockets</h1>
+      <p class="intro-p">A phone-first live experience: two or more devices play together in real time via Socket.IO. No auth, no database—just the game while everyone is connected.</p>
+      <p class="intro-p"><strong>This project</strong>: Farkle—multiplayer dice game. First to 10,000 points wins. Deployed on the Hong Kong server; run <code>node server.js</code> before presenting and share the URL (or QR code).</p>
+    </section>
+
+    <header class="app-header">
+      <h2>Farkle</h2>
+      <div class="status" id="statusText"></div>
+    </header>
+
+    <section class="players">
+      <h2>Players</h2>
+      <ul id="playersList"></ul>
+    </section>
+
+    <section class="board">
+      <div class="dice-area">
+        <div class="dice-row" id="diceRow"></div>
+        <div class="turn-points">
+          Turn points: <span id="turnPoints">0</span>
+        </div>
+        <div class="controls">
+          <button id="rollBtn">Roll</button>
+          <button id="bankBtn">Bank</button>
+          <button id="newGameBtn">New Game</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="log">
+      <h2>Log</h2>
+      <ul id="logList"></ul>
+    </section>
+
+    <section class="rules">
+      <h2>Game Rules</h2>
+      <ul>
+        <li><strong>Objective:</strong> Be the first to reach 10,000 points.</li>
+        <li><strong>Turns:</strong> Only the current player (green outline) can roll. Others wait until their turn.</li>
+        <li><strong>Roll:</strong> Single 1s = 100 pts, single 5s = 50 pts. Three-of-a-kind = 200–600 pts (three 1s = 1000). Straight 1–6 = 1500 pts.</li>
+        <li><strong>Farkle:</strong> If a roll has no scoring dice, you lose all points for that turn and play passes to the next player.</li>
+        <li><strong>Bank:</strong> Save your turn points to your total and pass the dice to the next player.</li>
+        <li><strong>Hot dice:</strong> If all six dice score, you may roll all six again and keep adding to your turn.</li>
+        <li><strong>Winning:</strong> First player to reach 10,000+ wins. Use <strong>New Game</strong> to play again.</li>
+      </ul>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

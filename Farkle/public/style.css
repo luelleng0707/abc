@@ -1,0 +1,294 @@
+body{
+    margin: 0;
+    overflow: hidden;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.main-wrapper{
+    width:100%;
+    height:100dvh;
+    background-color: #d8ffc4;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-wrap {
+  width: 20vw;
+  height: 20vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.img-wrap img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  width: auto;
+}
+
+.hud{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 12px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.hud > *{
+  pointer-events: auto;
+}
+
+.app-header{
+  margin-bottom: 8px;
+}
+
+.intro{
+  width: 100%;
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.intro h1{
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.intro-p{
+  margin: 0 0 6px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.intro-p:last-child{
+  margin-bottom: 0;
+}
+
+.intro code{
+  background: rgba(0,0,0,0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8em;
+}
+
+.app-header h2{
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.status{
+  font-size: 0.9rem;
+  color: #1e293b;
+  margin-top: 4px;
+}
+
+.players{
+  width: 100%;
+  background: rgba(15, 23, 42, 0.85);
+  color: #e5e7eb;
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+
+.players h2{
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+#playersList{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.player-item{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 6px;
+  border-radius: 8px;
+  margin-bottom: 3px;
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.player-main{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.player-avatar{
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.player-avatar img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.player-name{
+  font-size: 0.85rem;
+}
+
+.player-score{
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.player-current{
+  outline: 2px solid #22c55e;
+}
+
+.player-winner{
+  outline: 2px solid #facc15;
+}
+
+.player-me{
+  border: 1px solid #22c55e;
+}
+
+.board{
+  width: 100%;
+  background: rgba(15, 23, 42, 0.85);
+  color: #e5e7eb;
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+
+.dice-area{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dice-row{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.die{
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.die img{
+  width: 90%;
+  height: 90%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.turn-points{
+  font-size: 0.9rem;
+}
+
+.controls{
+  display: flex;
+  gap: 6px;
+}
+
+.controls button{
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+#rollBtn{
+  background: #22c55e;
+  color: #022c22;
+}
+
+#bankBtn{
+  background: #0ea5e9;
+  color: #e0f2fe;
+}
+
+#newGameBtn{
+  background: #4b5563;
+  color: #e5e7eb;
+}
+
+.controls button:disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.log{
+  width: 100%;
+  background: rgba(15, 23, 42, 0.85);
+  color: #e5e7eb;
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+
+.log h2{
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+}
+
+#logList{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 120px;
+  overflow-y: auto;
+  font-size: 0.8rem;
+}
+
+.log-item{
+  padding: 3px 0;
+}
+
+.rules{
+  width: 100%;
+  background: rgba(15, 23, 42, 0.85);
+  color: #e5e7eb;
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
+.rules h2{
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+}
+
+.rules ul{
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.rules li{
+  margin-bottom: 4px;
+}
+
+.rules li:last-child{
+  margin-bottom: 0;
+}
